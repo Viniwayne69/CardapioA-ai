@@ -1,0 +1,1397 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Monte Belo Delivery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=League+Spartan:wght@700;800;900&family=Open+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #fff8e8;
+      color: #1b1020;
+      font-family: "Open Sans", Arial, sans-serif;
+      overflow-x: hidden;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      color: inherit;
+      transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+    }
+
+    button:active {
+      transform: scale(0.96);
+    }
+
+    .app-shell {
+      width: 100vw;
+      max-width: 430px;
+      min-height: 100vh;
+      margin: 0 auto;
+      position: relative;
+      background: #fffaf0;
+      box-shadow: none;
+      overflow: hidden;
+      padding-bottom: 96px;
+    }
+
+    .app-shell::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      border-left: 1px solid rgba(173, 125, 28, 0.12);
+      border-right: 1px solid rgba(173, 125, 28, 0.12);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: grid;
+      grid-template-columns: 46px minmax(0, 1fr) 46px;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 14px 10px;
+      background: rgba(255, 250, 240, 0.96);
+      border-bottom: 1px solid rgba(173, 125, 28, 0.14);
+      backdrop-filter: blur(12px);
+    }
+
+    .icon-button {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: #fffaf0;
+      border: 1px solid rgba(173, 125, 28, 0.22);
+      color: #ad7d1c;
+      font-size: 12px;
+      font-weight: 900;
+      box-shadow: none;
+      position: relative;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      min-width: 21px;
+      height: 21px;
+      padding: 0 6px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: #e72424;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 900;
+      border: 2px solid #ffffff;
+    }
+
+    .logo {
+      text-align: center;
+      line-height: 1;
+      filter: none;
+      min-width: 0;
+    }
+
+    .logo-small {
+      display: block;
+      color: #7a168f;
+      font-family: "League Spartan", sans-serif;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-shadow: none;
+    }
+
+    .logo-main {
+      display: block;
+      color: #ad7d1c;
+      font-family: "Anton", sans-serif;
+      font-size: clamp(28px, 8.5vw, 42px);
+      letter-spacing: 0;
+      text-shadow: none;
+    }
+
+    .hero {
+      margin: 16px 14px 14px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(173, 125, 28, 0.14);
+      border-radius: 20px;
+      padding: 16px;
+      background: #fffaf0;
+      box-shadow: none;
+    }
+
+    .hero::before {
+      display: none;
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(122, 22, 143, 0.08);
+      border: 1px solid rgba(122, 22, 143, 0.18);
+      color: #7a168f;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      margin-top: 12px;
+      font-family: "Anton", sans-serif;
+      font-size: clamp(34px, 10vw, 48px);
+      line-height: 1;
+      color: #7a168f;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      text-shadow: none;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero p {
+      max-width: 280px;
+      margin-top: 10px;
+      color: #38233f;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.45;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-image-slot {
+      min-height: 168px;
+      margin-top: 16px;
+      border-radius: 18px;
+      background: #fffdf6;
+      border: 1px solid rgba(173, 125, 28, 0.14);
+      overflow: hidden;
+    }
+
+    .hero-image-slot img {
+      width: 100%;
+      height: 100%;
+      min-height: 168px;
+      display: block;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .primary-button,
+    .whatsapp-button,
+    .add-order-button {
+      width: 100%;
+      min-height: 54px;
+      border-radius: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      box-shadow: none;
+    }
+
+    .primary-button {
+      margin-top: 14px;
+      background: #7a168f;
+      color: #ffffff;
+      border: 1px solid #7a168f;
+      text-shadow: none;
+    }
+
+    .primary-button:hover {
+      box-shadow: none;
+    }
+
+    .section-head {
+      padding: 4px 14px 10px;
+    }
+
+    .section-head small {
+      display: block;
+      color: #7a168f;
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .section-head h2 {
+      margin-top: 3px;
+      font-family: "Anton", sans-serif;
+      font-size: 26px;
+      line-height: 1;
+      color: #1b1020;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      text-shadow: none;
+    }
+
+    .categories {
+      display: flex;
+      gap: 9px;
+      overflow-x: auto;
+      padding: 0 14px 14px;
+      scroll-snap-type: x proximity;
+      scrollbar-width: none;
+    }
+
+    .categories::-webkit-scrollbar {
+      display: none;
+    }
+
+    .category-button {
+      flex: 0 0 auto;
+      min-height: 44px;
+      padding: 8px 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      background: #fffaf0;
+      border: 1px solid rgba(122, 22, 143, 0.18);
+      color: #38233f;
+      font-size: 12px;
+      font-weight: 900;
+      scroll-snap-align: start;
+    }
+
+    .category-button.active {
+      background: #7a168f;
+      color: #ffffff;
+      border-color: #7a168f;
+      box-shadow: none;
+    }
+
+    .products {
+      display: grid;
+      gap: 12px;
+      padding: 0 14px 16px;
+    }
+
+    .product-card {
+      display: grid;
+      grid-template-columns: 110px minmax(0, 1fr);
+      gap: 12px;
+      min-height: 0;
+      padding: 14px;
+      border-radius: 18px;
+      background: #fffaf0;
+      border: 1px solid rgba(122, 22, 143, 0.14);
+      box-shadow: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-card::after {
+      display: none;
+    }
+
+    .product-image-slot {
+      min-height: 118px;
+      border-radius: 16px;
+      background: #fffdf6;
+      border: 1px dashed rgba(173, 125, 28, 0.24);
+    }
+
+    .product-info {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tag {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      min-height: 22px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(122, 22, 143, 0.08);
+      color: #7a168f;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      box-shadow: none;
+    }
+
+    .product-info h3 {
+      margin-top: 8px;
+      color: #7a168f;
+      font-family: "League Spartan", sans-serif;
+      font-size: 19px;
+      line-height: 1;
+      font-weight: 800;
+    }
+
+    .product-info p {
+      margin-top: 6px;
+      color: #5d4b63;
+      font-size: 12px;
+      line-height: 1.35;
+      font-weight: 500;
+    }
+
+    .product-bottom {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .price {
+      color: #1b1020;
+      font-size: 18px;
+      font-weight: 900;
+      text-shadow: none;
+    }
+
+    .add-button {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: #7a168f;
+      color: #ffffff;
+      font-size: 24px;
+      font-weight: 900;
+      box-shadow: none;
+    }
+
+    .cart-panel,
+    .detail-panel {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      background: rgba(27, 16, 32, 0.2);
+      backdrop-filter: blur(8px);
+    }
+
+    .cart-panel.open,
+    .detail-panel.open {
+      display: flex;
+    }
+
+    .panel-sheet {
+      width: min(100%, 430px);
+      max-height: 92vh;
+      overflow-y: auto;
+      padding: 14px 14px 106px;
+      border-radius: 30px 30px 0 0;
+      background: #fffaf0;
+      border: 1px solid rgba(122, 22, 143, 0.16);
+      box-shadow: none;
+      animation: sheet-up 220ms ease both;
+    }
+
+    @keyframes sheet-up {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .panel-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .back-button {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: #fbf8fc;
+      color: #7a168f;
+      border: 1px solid rgba(122, 22, 143, 0.18);
+      font-size: 21px;
+      font-weight: 900;
+    }
+
+    .panel-title {
+      flex: 1;
+    }
+
+    .panel-title small {
+      display: block;
+      color: #7a168f;
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .panel-title h2 {
+      color: #1b1020;
+      font-family: "Anton", sans-serif;
+      font-size: 31px;
+      line-height: 1;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .detail-copy {
+      margin-top: 4px;
+    }
+
+    .detail-copy h3 {
+      color: #7a168f;
+      font-family: "League Spartan", sans-serif;
+      font-size: 31px;
+      line-height: 0.96;
+      font-weight: 900;
+    }
+
+    .detail-copy p {
+      margin-top: 9px;
+      color: #5d4b63;
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 600;
+    }
+
+    .detail-price {
+      margin-top: 12px;
+      display: inline-flex;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(122, 22, 143, 0.08);
+      border: 1px solid rgba(122, 22, 143, 0.18);
+      color: #1b1020;
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .option-group {
+      margin-top: 18px;
+      padding: 13px;
+      border-radius: 22px;
+      background: #fbf8fc;
+      border: 1px solid rgba(122, 22, 143, 0.14);
+    }
+
+    .option-group h4 {
+      color: #7a168f;
+      font-size: 15px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .addon-list {
+      display: grid;
+      gap: 9px;
+    }
+
+    .addon-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      min-height: 44px;
+      padding: 10px;
+      border-radius: 15px;
+      background: #fffaf0;
+      border: 1px solid rgba(122, 22, 143, 0.1);
+      color: #38233f;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .addon-item input {
+      width: 20px;
+      height: 20px;
+      accent-color: #ffd400;
+    }
+
+    .addon-item strong {
+      color: #7a168f;
+      white-space: nowrap;
+    }
+
+    .qty-row {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px;
+      border-radius: 20px;
+      background: #fbf8fc;
+      border: 1px solid rgba(122, 22, 143, 0.14);
+    }
+
+    .qty-row span {
+      font-weight: 900;
+      color: #1b1020;
+    }
+
+    .qty-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .qty-button {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: #7a168f;
+      color: #ffffff;
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .qty-value {
+      min-width: 28px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .add-order-button {
+      margin-top: 14px;
+      background: #7a168f;
+      color: #ffffff;
+    }
+
+    .cart-items {
+      display: grid;
+      gap: 10px;
+    }
+
+    .empty-cart {
+      padding: 28px 18px;
+      border-radius: 22px;
+      border: 1px dashed rgba(255, 212, 0, 0.34);
+      color: rgba(255, 255, 255, 0.72);
+      text-align: center;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .cart-item {
+      padding: 10px;
+      border-radius: 20px;
+      background: #ffffff;
+      border: 1px solid rgba(122, 22, 143, 0.12);
+    }
+
+    .cart-item h4 {
+      color: #7a168f;
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 1.15;
+    }
+
+    .cart-item p {
+      margin-top: 4px;
+      color: #5d4b63;
+      font-size: 11px;
+      line-height: 1.35;
+      font-weight: 600;
+    }
+
+    .cart-line-bottom {
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .mini-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .mini-actions button {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: rgba(122, 22, 143, 0.08);
+      color: #7a168f;
+      border: 1px solid rgba(122, 22, 143, 0.18);
+      font-weight: 900;
+    }
+
+    .remove-button {
+      background: rgba(231, 36, 36, 0.16) !important;
+      color: #e72424 !important;
+      border-color: rgba(231, 36, 36, 0.35) !important;
+    }
+
+    .totals {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 22px;
+      background: #fbf8fc;
+      border: 1px solid rgba(122, 22, 143, 0.14);
+      display: grid;
+      gap: 9px;
+    }
+
+    .total-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: #5d4b63;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .total-line.final {
+      padding-top: 9px;
+      border-top: 1px solid rgba(122, 22, 143, 0.14);
+      color: #1b1020;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .customer-form {
+      margin-top: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label {
+      color: #7a168f;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      min-height: 48px;
+      border-radius: 16px;
+      border: 1px solid rgba(122, 22, 143, 0.16);
+      background: #ffffff;
+      color: #1b1020;
+      padding: 12px;
+      outline: none;
+      font-weight: 700;
+    }
+
+    .field select option {
+      background: #ffffff;
+      color: #1b1020;
+    }
+
+    .field textarea {
+      min-height: 86px;
+      resize: vertical;
+    }
+
+    .whatsapp-button {
+      margin-top: 4px;
+      background: linear-gradient(180deg, #46ee83, #25d366 55%, #128c4a);
+      color: #031107;
+      box-shadow: none;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      bottom: 12px;
+      z-index: 30;
+      transform: translateX(-50%);
+      width: calc(100vw - 24px);
+      max-width: 406px;
+      min-height: 68px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
+      padding: 8px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(122, 22, 143, 0.14);
+      box-shadow: none;
+      backdrop-filter: blur(15px);
+    }
+
+    .nav-item {
+      display: grid;
+      place-items: center;
+      gap: 2px;
+      border-radius: 18px;
+      background: transparent;
+      color: #5d4b63;
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .nav-item span {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .nav-item.active {
+      background: rgba(122, 22, 143, 0.08);
+      color: #7a168f;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 92px;
+      z-index: 60;
+      transform: translate(-50%, 18px);
+      width: min(calc(100% - 36px), 380px);
+      padding: 13px 16px;
+      border-radius: 18px;
+      background: #7a168f;
+      color: #ffffff;
+      font-weight: 900;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+      box-shadow: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    @media (min-width: 760px) {
+      body {
+        padding: 26px 0;
+      }
+
+      .app-shell {
+        min-height: calc(100vh - 52px);
+        border-radius: 34px;
+        border: 1px solid rgba(122, 22, 143, 0.14);
+      }
+
+      .topbar {
+        border-radius: 34px 34px 0 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell" id="inicio">
+    <header class="topbar">
+      <button class="icon-button" type="button" aria-label="Abrir menu">☰</button>
+      <div class="logo" aria-label="Monte Belo Delivery">
+        <span class="logo-small">DELIVERY</span>
+        <span class="logo-main">MONTE BELO</span>
+      </div>
+      <button class="icon-button" type="button" aria-label="Abrir carrinho" id="headerCartButton">
+        Pedido
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </header>
+
+    <section class="hero">
+      <span class="hero-kicker">Açaí cremoso pelo WhatsApp</span>
+      <h1>Bateu vontade de açaí?</h1>
+      <p>Açaí gelado, frutas, coberturas e combos chegando até você com sabor grande, preço amigo e entrega ligeira.</p>
+      <div class="hero-image-slot">
+        <img src="assets/monte-belo-logo.jpeg" alt="Logo Monte Belo Delivery">
+      </div>
+      <button class="primary-button" type="button" id="heroMenuButton">Ver açaís</button>
+    </section>
+
+    <section id="cardapio">
+      <div class="section-head">
+        <small>Cardápio de açaí</small>
+        <h2>Escolha seu copo</h2>
+      </div>
+      <nav class="categories" id="categories" aria-label="Categorias do cardápio"></nav>
+      <div class="products" id="products"></div>
+    </section>
+  </main>
+
+  <section class="detail-panel" id="detailPanel" aria-modal="true" role="dialog">
+    <div class="panel-sheet">
+      <div class="panel-top">
+        <button class="back-button" type="button" id="closeDetailButton" aria-label="Voltar">‹</button>
+        <div class="panel-title">
+          <small>Detalhes do produto</small>
+          <h2>Monte seu pedido</h2>
+        </div>
+      </div>
+      <div id="detailContent"></div>
+    </div>
+  </section>
+
+  <section class="cart-panel" id="cartPanel" aria-modal="true" role="dialog">
+    <div class="panel-sheet">
+      <div class="panel-top">
+        <button class="back-button" type="button" id="closeCartButton" aria-label="Fechar carrinho">‹</button>
+        <div class="panel-title">
+          <small>Finalize no WhatsApp</small>
+          <h2>Meu Pedido</h2>
+        </div>
+      </div>
+      <div class="cart-items" id="cartItems"></div>
+      <div class="totals">
+        <div class="total-line"><span>Subtotal</span><strong id="subtotalValue">R$ 0,00</strong></div>
+        <div class="total-line"><span>Taxa de entrega</span><strong id="deliveryValue">R$ 0,00</strong></div>
+        <div class="total-line final"><span>Total</span><strong id="totalValue">R$ 0,00</strong></div>
+      </div>
+      <form class="customer-form" id="checkoutForm">
+        <div class="field">
+          <label for="customerName">Nome do cliente</label>
+          <input id="customerName" name="customerName" placeholder="Seu nome" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="customerAddress">Endereço de entrega</label>
+          <input id="customerAddress" name="customerAddress" placeholder="Rua, número e bairro" autocomplete="street-address">
+        </div>
+        <div class="field">
+          <label for="customerReference">Ponto de referência</label>
+          <input id="customerReference" name="customerReference" placeholder="Perto de onde fica?">
+        </div>
+        <div class="field">
+          <label for="paymentMethod">Forma de pagamento</label>
+          <select id="paymentMethod" name="paymentMethod">
+            <option>Pix</option>
+            <option>Dinheiro</option>
+            <option>Cartão</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="orderNotes">Observações do pedido</label>
+          <textarea id="orderNotes" name="orderNotes" placeholder="Exemplo, tirar cebola, enviar troco ou caprichar na cobertura"></textarea>
+        </div>
+        <button class="whatsapp-button" type="submit">Finalizar pelo WhatsApp</button>
+      </form>
+    </div>
+  </section>
+
+  <nav class="bottom-nav" aria-label="Navegação inferior">
+    <button class="nav-item active" type="button" data-nav="inicio">Início</button>
+    <button class="nav-item" type="button" data-nav="cardapio">Cardápio</button>
+    <button class="nav-item" type="button" data-nav="pedido">Pedido</button>
+    <button class="nav-item" type="button" data-nav="whatsapp">WhatsApp</button>
+  </nav>
+
+  <div class="toast" id="toast">Adicionado ao pedido</div>
+
+  <script>
+    // Altere aqui o nome da marca
+    const BRAND_NAME = "Monte Belo Delivery";
+
+    // Altere aqui o número do WhatsApp
+    const WHATSAPP_NUMBER = "5527992837257";
+
+    // Altere aqui a taxa de entrega
+    const DELIVERY_FEE = 0;
+
+    const categories = [
+      { id: "acai", name: "Açaí" },
+      { id: "mais-pedidos", name: "Mais pedidos" },
+      { id: "combos", name: "Combos" },
+      { id: "pizza", name: "Pizza" },
+      { id: "pipoca", name: "Pipoca Gourmet" },
+      { id: "bebidas", name: "Bebidas" },
+      { id: "promocoes", name: "Promoções" }
+    ];
+
+    // Altere aqui os produtos do cardápio
+    const products = [
+      { id: 1, nome: "Açaí Monte Belo 700ml", categoria: "mais-pedidos", descricao: "Açaí completo com frutas, granola, leite em pó, paçoca e cobertura, grande, bonito e generoso.", preco: 29.9, tag: "Mais pedido", tipo: "acai" },
+      { id: 2, nome: "Açaí Especial 500ml", categoria: "mais-pedidos", descricao: "Açaí com morango, banana, granola, leite condensado e leite em pó, feito para quem gosta de capricho.", preco: 22.9, tag: "Cremoso", tipo: "acai" },
+      { id: 3, nome: "Combo Açaí Duplo", categoria: "mais-pedidos", descricao: "Dois açaís especiais 500ml, gelados, cremosos e prontos para adoçar o dia.", preco: 39.9, tag: "Duplo", tipo: "combo" },
+      { id: 4, nome: "Açaí Família 1L", categoria: "mais-pedidos", descricao: "Açaí grande para dividir, com acompanhamentos especiais e sabor de encontro bom.", preco: 39.9, tag: "Família", tipo: "acai" },
+      { id: 5, nome: "Pizza Calabresa", categoria: "pizza", descricao: "Molho especial, calabresa, cebola e queijo derretido, com aquele perfume de forno chegando na mesa.", preco: 39.9, tag: "Mais pedido", tipo: "pizza" },
+      { id: 6, nome: "Pizza Mussarela", categoria: "pizza", descricao: "Queijo derretido, molho artesanal e orégano, simples, cremosa e sempre certeira.", preco: 36.9, tag: "Tradicional", tipo: "pizza" },
+      { id: 7, nome: "Pizza Frango com Catupiry", categoria: "pizza", descricao: "Frango temperado, catupiry e mussarela, uma combinação cremosa para pedir sem pensar duas vezes.", preco: 44.9, tag: "Cremosa", tipo: "pizza" },
+      { id: 8, nome: "Pizza Portuguesa", categoria: "pizza", descricao: "Presunto, ovos, cebola, pimentão, queijo e azeitona, uma pizza completa e bem servida.", preco: 46.9, tag: "Completa", tipo: "pizza" },
+      { id: 9, nome: "Açaí Tradicional 300ml", categoria: "acai", descricao: "Açaí cremoso com banana e granola, gelado, encorpado e gostoso até a última colherada.", preco: 15.9, tag: "Gelado", tipo: "acai" },
+      { id: 10, nome: "Açaí Especial 500ml", categoria: "acai", descricao: "Açaí com morango, banana, granola, leite condensado e leite em pó, feito para quem gosta de capricho.", preco: 22.9, tag: "Especial", tipo: "acai" },
+      { id: 11, nome: "Açaí Monte Belo 700ml", categoria: "acai", descricao: "Açaí completo com frutas, granola, leite em pó, paçoca e cobertura, grande, bonito e generoso.", preco: 29.9, tag: "Monte Belo", tipo: "acai" },
+      { id: 12, nome: "Açaí Família 1L", categoria: "acai", descricao: "Açaí grande para dividir, com acompanhamentos especiais e sabor de encontro bom.", preco: 39.9, tag: "Família", tipo: "acai" },
+      { id: 13, nome: "Pipoca Gourmet Doce", categoria: "pipoca", descricao: "Pipoca caramelizada com cobertura especial, dourada, crocante e muito perfumada.", preco: 18.9, tag: "Doce", tipo: "pipoca" },
+      { id: 14, nome: "Pipoca Gourmet Chocolate", categoria: "pipoca", descricao: "Pipoca com cobertura de chocolate e toque crocante, feita para beliscar sem parar.", preco: 21.9, tag: "Chocolate", tipo: "pipoca" },
+      { id: 15, nome: "Pipoca Gourmet Leite Ninho", categoria: "pipoca", descricao: "Pipoca doce com leite em pó e calda cremosa, branquinha, macia e cheia de charme.", preco: 22.9, tag: "Queridinha", tipo: "pipoca" },
+      { id: 16, nome: "Pipoca Gourmet Mista", categoria: "pipoca", descricao: "Combinação de sabores doces especiais, criada para quem gosta de variedade e surpresa boa.", preco: 24.9, tag: "Mista", tipo: "pipoca" },
+      { id: 17, nome: "Combo Pizza + Refri", categoria: "combos", descricao: "Pizza média e refrigerante 1L, um combo direto, farto e perfeito para dividir.", preco: 54.9, tag: "Combo", tipo: "combo" },
+      { id: 18, nome: "Combo Açaí Duplo", categoria: "combos", descricao: "Dois açaís especiais 500ml, gelados, cremosos e prontos para adoçar o dia.", preco: 39.9, tag: "Duplo", tipo: "combo" },
+      { id: 19, nome: "Combo Pipoca Gourmet", categoria: "combos", descricao: "Duas pipocas gourmet especiais, uma escolha bonita para filme, conversa e vontade de doce.", preco: 39.9, tag: "Gourmet", tipo: "combo" },
+      { id: 20, nome: "Combo Monte Belo", categoria: "combos", descricao: "Pizza média, açaí 300ml e pipoca gourmet, o combo vitrine da casa.", preco: 79.9, tag: "Completo", tipo: "combo" },
+      { id: 21, nome: "Pizza Quentinha", categoria: "promocoes", descricao: "Pizza selecionada do dia, saindo com preço amigo e aquele cheiro que abre o apetite.", preco: 34.9, tag: "Promoção", tipo: "pizza" },
+      { id: 22, nome: "Açaí do Dia", categoria: "promocoes", descricao: "Açaí 300ml com acompanhamentos, gelado, cremoso e pronto para pedir agora.", preco: 13.9, tag: "Oferta", tipo: "acai" },
+      { id: 23, nome: "Pipoca Promocional", categoria: "promocoes", descricao: "Pipoca gourmet sabor especial, crocante, doce e com valor para aproveitar.", preco: 15.9, tag: "Oferta", tipo: "pipoca" },
+      { id: 24, nome: "Combo Econômico", categoria: "promocoes", descricao: "Pizza broto e bebida, pequeno no preço e grande na vontade de repetir.", preco: 29.9, tag: "Econômico", tipo: "combo" },
+      { id: 25, nome: "Coca Cola 350ml", categoria: "bebidas", descricao: "Refrigerante gelado para acompanhar sua pizza, seu combo ou sua pausa.", preco: 6, tag: "Gelada", tipo: "bebida" },
+      { id: 26, nome: "Guaraná 350ml", categoria: "bebidas", descricao: "Refrigerante gelado, leve e perfeito para completar o pedido.", preco: 6, tag: "Gelada", tipo: "bebida" },
+      { id: 27, nome: "Refrigerante 1L", categoria: "bebidas", descricao: "Escolha o sabor disponível e deixe a mesa mais completa.", preco: 10, tag: "1L", tipo: "bebida" },
+      { id: 28, nome: "Água Mineral", categoria: "bebidas", descricao: "Garrafa 500ml, simples, gelada e necessária.", preco: 4, tag: "500ml", tipo: "bebida" }
+    ];
+
+    const addonsByType = {
+      pizza: [
+        { name: "Borda recheada", price: 6 },
+        { name: "Queijo extra", price: 5 },
+        { name: "Calabresa extra", price: 4 },
+        { name: "Catupiry extra", price: 4 }
+      ],
+      acai: [
+        { name: "Banana", price: 2 },
+        { name: "Morango", price: 3 },
+        { name: "Granola", price: 2 },
+        { name: "Leite em pó", price: 3 },
+        { name: "Leite condensado", price: 2.5 },
+        { name: "Paçoca", price: 2 }
+      ],
+      pipoca: [
+        { name: "Cobertura extra", price: 3 },
+        { name: "Chocolate extra", price: 4 },
+        { name: "Leite Ninho", price: 3 },
+        { name: "Caramelo extra", price: 3 }
+      ],
+      bebida: [
+        { name: "Gelo", price: 0 },
+        { name: "Copo descartável", price: 0.5 }
+      ],
+      combo: [
+        { name: "Refrigerante maior", price: 5 },
+        { name: "Açaí maior", price: 6 },
+        { name: "Pipoca extra", price: 8 }
+      ]
+    };
+
+    let activeCategory = "acai";
+    let selectedProduct = null;
+    let selectedQty = 1;
+    let selectedAddons = [];
+    let cart = [];
+
+    const categoriesEl = document.getElementById("categories");
+    const productsEl = document.getElementById("products");
+    const detailPanel = document.getElementById("detailPanel");
+    const detailContent = document.getElementById("detailContent");
+    const cartPanel = document.getElementById("cartPanel");
+    const cartItemsEl = document.getElementById("cartItems");
+    const cartCountEl = document.getElementById("cartCount");
+    const subtotalValueEl = document.getElementById("subtotalValue");
+    const deliveryValueEl = document.getElementById("deliveryValue");
+    const totalValueEl = document.getElementById("totalValue");
+    const toastEl = document.getElementById("toast");
+
+    function formatCurrency(value) {
+      return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    }
+
+    function renderCategories() {
+      categoriesEl.innerHTML = categories.map(category => `
+        <button class="category-button ${category.id === activeCategory ? "active" : ""}" type="button" data-category="${category.id}">
+          ${category.name}
+        </button>
+      `).join("");
+    }
+
+    function renderProducts() {
+      const visibleProducts = products.filter(product => product.categoria === activeCategory);
+
+      productsEl.innerHTML = visibleProducts.map(product => `
+        <article class="product-card" data-product-id="${product.id}" tabindex="0" role="button" aria-label="Abrir detalhes de ${product.nome}">
+          <div class="product-image-slot" aria-hidden="true"></div>
+          <div class="product-info">
+            <span class="tag">${product.tag}</span>
+            <h3>${product.nome}</h3>
+            <p>${product.descricao}</p>
+            <div class="product-bottom">
+              <strong class="price">${formatCurrency(product.preco)}</strong>
+              <button class="add-button" type="button" data-quick-add="${product.id}" aria-label="Adicionar ${product.nome}">+</button>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function setActiveCategory(categoryId) {
+      activeCategory = categoryId;
+      renderCategories();
+      renderProducts();
+      setNavActive("cardapio");
+      document.getElementById("cardapio").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function openDetail(productId) {
+      selectedProduct = products.find(product => product.id === productId);
+      selectedQty = 1;
+      selectedAddons = [];
+
+      if (!selectedProduct) return;
+
+      renderDetail();
+      detailPanel.classList.add("open");
+      setNavActive("cardapio");
+    }
+
+    function renderDetail() {
+      const addons = addonsByType[selectedProduct.tipo] || [];
+      const addonsTotal = selectedAddons.reduce((sum, addon) => sum + addon.price, 0);
+      const currentTotal = (selectedProduct.preco + addonsTotal) * selectedQty;
+
+      detailContent.innerHTML = `
+        <div class="detail-copy">
+          <h3>${selectedProduct.nome}</h3>
+          <p>${selectedProduct.descricao}</p>
+          <strong class="detail-price">${formatCurrency(selectedProduct.preco)}</strong>
+        </div>
+        <div class="option-group">
+          <h4>Adicionais</h4>
+          <div class="addon-list">
+            ${addons.map((addon, index) => {
+              const checked = selectedAddons.some(item => item.name === addon.name) ? "checked" : "";
+              return `
+                <label class="addon-item">
+                  <span>${addon.name}</span>
+                  <span>
+                    <strong>${formatCurrency(addon.price)}</strong>
+                    <input type="checkbox" data-addon-index="${index}" ${checked}>
+                  </span>
+                </label>
+              `;
+            }).join("")}
+          </div>
+        </div>
+        <div class="qty-row">
+          <span>Quantidade</span>
+          <div class="qty-control">
+            <button class="qty-button" type="button" data-detail-qty="minus">−</button>
+            <strong class="qty-value">${selectedQty}</strong>
+            <button class="qty-button" type="button" data-detail-qty="plus">+</button>
+          </div>
+        </div>
+        <button class="add-order-button" type="button" id="addDetailToCart">Adicionar ao pedido, ${formatCurrency(currentTotal)}</button>
+      `;
+    }
+
+    function closeDetail() {
+      detailPanel.classList.remove("open");
+    }
+
+    function addToCart(product, addons = [], qty = 1) {
+      const lineId = `${product.id}-${addons.map(addon => addon.name).sort().join("|")}`;
+      const existingItem = cart.find(item => item.lineId === lineId);
+      const itemPrice = product.preco + addons.reduce((sum, addon) => sum + addon.price, 0);
+
+      if (existingItem) {
+        existingItem.qty += qty;
+      } else {
+        cart.push({
+          lineId,
+          productId: product.id,
+          nome: product.nome,
+          tipo: product.tipo,
+          addons,
+          qty,
+          unitPrice: itemPrice
+        });
+      }
+
+      updateCart();
+      showToast("Adicionado ao pedido");
+    }
+
+    function updateCart() {
+      const itemCount = cart.reduce((sum, item) => sum + item.qty, 0);
+      const subtotal = getSubtotal();
+      const total = subtotal + DELIVERY_FEE;
+
+      cartCountEl.textContent = itemCount;
+      subtotalValueEl.textContent = formatCurrency(subtotal);
+      deliveryValueEl.textContent = formatCurrency(DELIVERY_FEE);
+      totalValueEl.textContent = formatCurrency(total);
+      renderCartItems();
+    }
+
+    function getSubtotal() {
+      return cart.reduce((sum, item) => sum + item.unitPrice * item.qty, 0);
+    }
+
+    function renderCartItems() {
+      if (!cart.length) {
+        cartItemsEl.innerHTML = `<div class="empty-cart">Seu pedido ainda está vazio, escolha uma pizza, um açaí ou uma pipoca gourmet para começar.</div>`;
+        return;
+      }
+
+      cartItemsEl.innerHTML = cart.map(item => {
+        const addonsText = item.addons.length ? item.addons.map(addon => addon.name).join(", ") : "Sem adicionais";
+        return `
+          <article class="cart-item">
+            <div>
+              <h4>${item.nome}</h4>
+              <p>${addonsText}</p>
+              <div class="cart-line-bottom">
+                <strong>${formatCurrency(item.unitPrice * item.qty)}</strong>
+                <div class="mini-actions">
+                  <button type="button" data-cart-minus="${item.lineId}" aria-label="Diminuir quantidade">−</button>
+                  <span>${item.qty}</span>
+                  <button type="button" data-cart-plus="${item.lineId}" aria-label="Aumentar quantidade">+</button>
+                  <button class="remove-button" type="button" data-cart-remove="${item.lineId}" aria-label="Remover item">×</button>
+                </div>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function openCart() {
+      cartPanel.classList.add("open");
+      setNavActive("pedido");
+      updateCart();
+    }
+
+    function closeCart() {
+      cartPanel.classList.remove("open");
+    }
+
+    function changeCartQty(lineId, change) {
+      const item = cart.find(cartItem => cartItem.lineId === lineId);
+      if (!item) return;
+
+      item.qty += change;
+      if (item.qty <= 0) {
+        cart = cart.filter(cartItem => cartItem.lineId !== lineId);
+      }
+      updateCart();
+    }
+
+    function removeCartItem(lineId) {
+      cart = cart.filter(item => item.lineId !== lineId);
+      updateCart();
+    }
+
+    function showToast(message) {
+      toastEl.textContent = message;
+      toastEl.classList.add("show");
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => toastEl.classList.remove("show"), 1800);
+    }
+
+    function buildWhatsAppMessage() {
+      const name = document.getElementById("customerName").value.trim() || "Não informado";
+      const address = document.getElementById("customerAddress").value.trim() || "Não informado";
+      const reference = document.getElementById("customerReference").value.trim() || "Não informado";
+      const payment = document.getElementById("paymentMethod").value;
+      const notes = document.getElementById("orderNotes").value.trim() || "Sem observações";
+      const subtotal = getSubtotal();
+      const total = subtotal + DELIVERY_FEE;
+
+      const itemsText = cart.map((item, index) => {
+        const addonsText = item.addons.length ? item.addons.map(addon => `${addon.name} (${formatCurrency(addon.price)})`).join(", ") : "Sem adicionais";
+        return `${index + 1}. ${item.qty}x ${item.nome}\nAdicionais: ${addonsText}\nValor: ${formatCurrency(item.unitPrice * item.qty)}`;
+      }).join("\n\n");
+
+      return [
+        `Pedido ${BRAND_NAME}`,
+        "",
+        `Nome do cliente: ${name}`,
+        `Endereço: ${address}`,
+        `Ponto de referência: ${reference}`,
+        `Forma de pagamento: ${payment}`,
+        "",
+        "Itens do pedido:",
+        itemsText,
+        "",
+        `Observações: ${notes}`,
+        "",
+        `Subtotal: ${formatCurrency(subtotal)}`,
+        `Taxa de entrega: ${formatCurrency(DELIVERY_FEE)}`,
+        `Total: ${formatCurrency(total)}`
+      ].join("\n");
+    }
+
+    function finishOrder(event) {
+      event.preventDefault();
+
+      if (!cart.length) {
+        showToast("Escolha pelo menos um produto");
+        return;
+      }
+
+      const message = encodeURIComponent(buildWhatsAppMessage());
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
+    }
+
+    function openDirectWhatsApp() {
+      const message = encodeURIComponent(`Olá, quero fazer um pedido no ${BRAND_NAME}.`);
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
+    }
+
+    function setNavActive(target) {
+      document.querySelectorAll(".nav-item").forEach(button => {
+        button.classList.toggle("active", button.dataset.nav === target);
+      });
+    }
+
+    categoriesEl.addEventListener("click", event => {
+      const button = event.target.closest("[data-category]");
+      if (!button) return;
+      setActiveCategory(button.dataset.category);
+    });
+
+    productsEl.addEventListener("click", event => {
+      const quickButton = event.target.closest("[data-quick-add]");
+      if (quickButton) {
+        event.stopPropagation();
+        const product = products.find(item => item.id === Number(quickButton.dataset.quickAdd));
+        if (product) addToCart(product);
+        return;
+      }
+
+      const card = event.target.closest("[data-product-id]");
+      if (card) openDetail(Number(card.dataset.productId));
+    });
+
+    productsEl.addEventListener("keydown", event => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      const card = event.target.closest("[data-product-id]");
+      if (card) {
+        event.preventDefault();
+        openDetail(Number(card.dataset.productId));
+      }
+    });
+
+    detailContent.addEventListener("change", event => {
+      const input = event.target.closest("[data-addon-index]");
+      if (!input || !selectedProduct) return;
+
+      const addon = addonsByType[selectedProduct.tipo][Number(input.dataset.addonIndex)];
+      if (input.checked) {
+        selectedAddons.push(addon);
+      } else {
+        selectedAddons = selectedAddons.filter(item => item.name !== addon.name);
+      }
+      renderDetail();
+    });
+
+    detailContent.addEventListener("click", event => {
+      const qtyButton = event.target.closest("[data-detail-qty]");
+      if (qtyButton) {
+        selectedQty = qtyButton.dataset.detailQty === "plus" ? selectedQty + 1 : Math.max(1, selectedQty - 1);
+        renderDetail();
+        return;
+      }
+
+      if (event.target.closest("#addDetailToCart") && selectedProduct) {
+        addToCart(selectedProduct, selectedAddons, selectedQty);
+        closeDetail();
+      }
+    });
+
+    cartItemsEl.addEventListener("click", event => {
+      const minus = event.target.closest("[data-cart-minus]");
+      const plus = event.target.closest("[data-cart-plus]");
+      const remove = event.target.closest("[data-cart-remove]");
+
+      if (minus) changeCartQty(minus.dataset.cartMinus, -1);
+      if (plus) changeCartQty(plus.dataset.cartPlus, 1);
+      if (remove) removeCartItem(remove.dataset.cartRemove);
+    });
+
+    document.getElementById("closeDetailButton").addEventListener("click", closeDetail);
+    document.getElementById("closeCartButton").addEventListener("click", closeCart);
+    document.getElementById("headerCartButton").addEventListener("click", openCart);
+    document.getElementById("checkoutForm").addEventListener("submit", finishOrder);
+
+    document.getElementById("heroMenuButton").addEventListener("click", () => {
+      setActiveCategory("acai");
+    });
+
+    document.querySelector(".bottom-nav").addEventListener("click", event => {
+      const button = event.target.closest("[data-nav]");
+      if (!button) return;
+
+      const target = button.dataset.nav;
+      setNavActive(target);
+
+      if (target === "inicio") {
+        document.getElementById("inicio").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      if (target === "cardapio") {
+        document.getElementById("cardapio").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      if (target === "pedido") {
+        openCart();
+      }
+
+      if (target === "whatsapp") {
+        openDirectWhatsApp();
+      }
+    });
+
+    detailPanel.addEventListener("click", event => {
+      if (event.target === detailPanel) closeDetail();
+    });
+
+    cartPanel.addEventListener("click", event => {
+      if (event.target === cartPanel) closeCart();
+    });
+
+    renderCategories();
+    renderProducts();
+    updateCart();
+  </script>
+</body>
+</html>
